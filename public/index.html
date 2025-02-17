@@ -13,6 +13,7 @@
         <button onclick="showSection('borrowBook')">Borrow Book</button>
         <button onclick="showSection('returnBook')">Return Book</button>
         <button onclick="showSection('bookHistory')">Book History</button>
+        <button onclick="showSection('borrowerHistory')">Borrower History</button>
     </nav>
 
     <div id="content">
@@ -46,6 +47,13 @@
             <select id="historyBookSelect"></select>
             <button onclick="viewHistory()">View History</button>
             <ul id="historyList"></ul>
+        </div>
+
+        <div class="card" id="borrowerHistory">
+            <h2>Borrower History</h2>
+            <input type="text" id="borrowerNameInput">
+            <button onclick="viewBorrowerHistory()">View History</button>
+            <ul id="borrowerHistoryList"></ul>
         </div>
     </div>
 

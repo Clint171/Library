@@ -21,7 +21,7 @@ async function fetchBooks() {
 
         bookList.innerHTML += `
             <li>
-                ${book.id}: ${book.title} by ${book.author}
+                ${book.title} by ${book.author}
                 <span class="tag ${statusClass}">${statusText}</span>
             </li>
         `;
@@ -37,14 +37,14 @@ async function addBook() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, author })
+    }).then(()=>{
+        loadBooks();
     });
-
-    fetchBooks();
 }
 
 // Borrow a book
 async function borrowBook() {
-    const bookId = document.getElementById("borrowBookId").value;
+    const bookId = document.getElementById("borrowBookSelect").value;
     const borrower = document.getElementById("borrowerName").value;
 
     await fetch(`${API_URL}/books/${bookId}/borrow`, {
@@ -53,31 +53,46 @@ async function borrowBook() {
         body: JSON.stringify({ borrower })
     });
 
-    fetchBooks();
+    loadBooks();
 }
 
 // Return a book
 async function returnBook() {
-    const bookId = document.getElementById("returnBookId").value;
+    const bookId = document.getElementById("returnBookSelect").value;
 
     await fetch(`${API_URL}/books/${bookId}/return`, {
         method: "POST"
     });
 
-    fetchBooks();
+    loadBooks();
 }
 
 // View a book's history
 async function viewHistory() {
-    const bookId = document.getElementById("historyBookId").value;
-    const response = await fetch(`${API_URL}/books/${bookId}/history`);
+    const bookId = document.getElementById("historyBookSelect").value;
+    const response = await fetch(`${API_URL}/books/${bookId}`);
     const history = await response.json();
 
     const historyList = document.getElementById("historyList");
-    historyList.innerHTML = "";
-    history.forEach(entry => {
+    historyList.innerHTML = "<h2>Borrowing History</h2>";
+    history.lendings.forEach(entry => {
         historyList.innerHTML += `
             <li>${entry.borrower} borrowed on ${entry.borrowed_at}, 
+            returned on ${entry.returned_at || "Not yet returned"}</li>`;
+    });
+}
+
+// View a borrower's history
+async function viewBorrowerHistory() {
+    const borrowerId = document.getElementById("borrowerNameInput").value;
+    const response = await fetch(`${API_URL}/borrower/${borrowerId}/history`);
+    const history = await response.json();
+
+    const historyList = document.getElementById("borrowerHistoryList");
+    historyList.innerHTML = "<h2>Borrowing History</h2>";
+    history.forEach(entry => {
+        historyList.innerHTML += `
+            <li>Book "${entry.id}" borrowed on ${entry.borrowed_at}, 
             returned on ${entry.returned_at || "Not yet returned"}</li>`;
     });
 }
@@ -106,7 +121,7 @@ async function populateBookDropdowns() {
         books.forEach(book => {
             let option = `<option value="${book.id}">${book.title} by ${book.author}</option>`;
 
-            if (book.available) {
+            if (book.status == "available") {
                 borrowSelect.innerHTML += option;
             } else {
                 returnSelect.innerHTML += option;
@@ -121,9 +136,13 @@ async function populateBookDropdowns() {
     }
 }
 
-// Ensure dropdowns are populated after books are loaded
-document.addEventListener("DOMContentLoaded", async () => {
+async function loadBooks(){
+    // Ensure dropdowns are populated after books are loaded
     await fetchBooks();
     await populateBookDropdowns();
     showSection('allBooks');
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    loadBooks()
 });
