@@ -9,7 +9,7 @@ class BooksController < ApplicationController
   
     # Show details of a single book (including lending history)
     def show
-      render json: @book, include: :lendings
+      render json: @book.as_json(include: :lendings)
     end
   
     # Create a new book

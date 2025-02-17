@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <button onclick="showSection('addBook')">Add Book</button>
+        <button onclick="showSection('allBooks')">All Books</button>
+        <button onclick="showSection('borrowBook')">Borrow Book</button>
+        <button onclick="showSection('returnBook')">Return Book</button>
+        <button onclick="showSection('bookHistory')">Book History</button>
+    </nav>
+
+    <div id="content">
+        <div class="card" id="addBook">
+            <h2>Add a Book</h2>
+            <input type="text" id="bookTitle" placeholder="Book Title">
+            <input type="text" id="bookAuthor" placeholder="Author">
+            <button onclick="addBook()">Add Book</button>
+        </div>
+
+        <div class="card" id="allBooks">
+            <h2>All Books</h2>
+            <ul id="bookList"></ul>
+        </div>
+
+        <div class="card" id="borrowBook">
+            <h2>Borrow a Book</h2>
+            <select id="borrowBookSelect"></select>
+            <input type="text" id="borrowerName" placeholder="Borrower's Name">
+            <button onclick="borrowBook()">Borrow</button>
+        </div>
+        
+        <div class="card" id="returnBook">
+            <h2>Return a Book</h2>
+            <select id="returnBookSelect"></select>
+            <button onclick="returnBook()">Return</button>
+        </div>
+        
+        <div class="card" id="bookHistory">
+            <h2>Book History</h2>
+            <select id="historyBookSelect"></select>
+            <button onclick="viewHistory()">View History</button>
+            <ul id="historyList"></ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
